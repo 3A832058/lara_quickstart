@@ -20,7 +20,17 @@ Route::get('/', function () {
 });
 
 Route::post('/task', function(Request $request){
-    //
+    //驗證輸入
+    $validator = Validator::make($request->all(), ['name'=>'required|max:255',]);
+    if ($validator->fails()){
+        return redirect('/')->withInput()->wuthErrors($validator);
+    }
+
+    //建立該任務...
+    $task = new Task;
+    $task->name = $request->name;
+    $task->save();
+    return reirect('/');
 });
 
 Route::delete('/task/{task}', function(Task $task){
